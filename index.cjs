@@ -15,7 +15,7 @@ app.use(cors());
 var db;
 var users;
 const uri =
-  "mongodb+srv://hasinichaithanya04:6hr9XjbxpsanJlOJ@cluster0.suc7fzf.mongodb.net/user_test_data?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://hasinichaithanya04:password@cluster0.suc7fzf.mongodb.net/user_test_data?retryWrites=true&w=majority&appName=Cluster0";
 const client = new MongoClient(uri);
 
 function Connect() {
