@@ -13,11 +13,18 @@ describe("User Management API", () => {
         .get("/get-all")
         .end((error, response) => {
           response.should.have.status(200);
+          response.body.should.have
+            .property("message")
+            .that.is.equal("Data is successfully fetched");
+          response.body.should.have
+            .property("total_count")
+            .that.is.an("number");
+          response.body.should.have.property("usersList").that.is.an("array");
           done();
         });
     });
 
-    it("It should not fetch all the users list", (done) => {
+    it("It should not fetch all the users list with wrong path", (done) => {
       chai
         .request("http://localhost:5000")
         .get("/get-all-users")
@@ -42,6 +49,10 @@ describe("User Management API", () => {
         .send(userDetails)
         .end((error, response) => {
           response.should.have.status(200);
+          response.body.should.have.property("userDetails");
+          response.body.should.have
+            .property("message")
+            .equal("User is added successfully");
           done();
         });
     });
@@ -54,6 +65,9 @@ describe("User Management API", () => {
         .send(userDetails)
         .end((error, response) => {
           response.should.have.status(404);
+          response.body.should.have
+            .property("message")
+            .equal("Cannot add empty user!");
           done();
         });
     });
@@ -68,6 +82,9 @@ describe("User Management API", () => {
         .get("/get-user/" + id)
         .end((error, response) => {
           response.should.have.status(200);
+          response.body.should.have
+            .property("userDetails")
+            .that.is.an("object");
           done();
         });
     });
@@ -79,6 +96,9 @@ describe("User Management API", () => {
         .get("/get-user/" + id)
         .end((error, response) => {
           response.should.have.status(404);
+          response.body.should.have
+            .property("message")
+            .equal("Invalid User ID");
           done();
         });
     });
@@ -94,6 +114,7 @@ describe("User Management API", () => {
         .get("/get-paginated?page=" + page + "&size=" + size)
         .end((error, response) => {
           response.should.have.status(200);
+          response.body.should.have.property("userList").that.is.an("array");
           done();
         });
     });
@@ -106,6 +127,7 @@ describe("User Management API", () => {
         .get("/get-paginated?page=" + page + "&size=" + size)
         .end((error, response) => {
           response.should.have.status(400);
+          response.body.should.have.property("message");
           done();
         });
     });
@@ -126,6 +148,8 @@ describe("User Management API", () => {
         .send(body)
         .end((error, response) => {
           response.should.have.status(200);
+          response.body.should.have.property("message");
+          response.body.should.have.property("response");
           done();
         });
     });
@@ -143,6 +167,8 @@ describe("User Management API", () => {
         .send(body)
         .end((error, response) => {
           response.should.have.status(400);
+          response.body.should.have.property("message");
+
           done();
         });
     });
@@ -161,6 +187,11 @@ describe("User Management API", () => {
         .send(body)
         .end((error, response) => {
           response.should.have.status(200);
+          response.body.should.have
+            .property("message")
+            .equal("User is updated successfully");
+          response.body.should.have.property("response");
+
           done();
         });
     });
@@ -176,11 +207,15 @@ describe("User Management API", () => {
         .send(body)
         .end((error, response) => {
           response.should.have.status(400);
+          response.body.should.have
+            .property("message")
+            .equal("Invalid User ID");
+
           done();
         });
     });
 
-    it("It should not update more than one fields at a time", (done) => {
+    it("It should not update more than one field at a time", (done) => {
       const id = "661503c989b9a866b4c8cb40";
       const body = {
         name: "Akshitha G",
@@ -192,6 +227,10 @@ describe("User Management API", () => {
         .send(body)
         .end((error, response) => {
           response.should.have.status(400);
+          response.body.should.have
+            .property("message")
+            .equal("Only one field should be provided for update");
+
           done();
         });
     });
@@ -199,7 +238,7 @@ describe("User Management API", () => {
 
   //Delete user based on the ID)
   describe("DELETE /delete-user API based on ID", () => {
-    it("It should update the user details based on the ID", (done) => {
+    it("It should delete the user details based on the ID", (done) => {
       const id = "661503c989b9a866b4c8cb40";
 
       chai
@@ -207,11 +246,15 @@ describe("User Management API", () => {
         .delete("/delete-user/" + id)
         .end((error, response) => {
           response.should.have.status(200);
+          response.body.should.have
+            .property("message")
+            .equal("User is deleted successfully");
+
           done();
         });
     });
 
-    it("It should not update the user details when wrong ID is given", (done) => {
+    it("It should not delete the user details when wrong ID is given", (done) => {
       const id = "661503c989b866b4c8cb40";
 
       chai
@@ -219,6 +262,10 @@ describe("User Management API", () => {
         .delete("/delete-user/" + id)
         .end((error, response) => {
           response.should.have.status(400);
+          response.body.should.have
+            .property("message")
+            .equal("Invalid user ID, could not delete the user");
+
           done();
         });
     });

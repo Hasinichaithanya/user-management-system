@@ -120,7 +120,9 @@ app.get("/get-paginated", async (req, res) => {
     .limit(size)
     .toArray()
     .then((result) => {
-      res.status(200).json({ message: "Fetched successfully", result });
+      res
+        .status(200)
+        .json({ message: "Fetched successfully", userList: result });
     })
     .catch((e) => {
       res.status(400).json("Error: ", e.message);
@@ -166,7 +168,7 @@ app.patch("/update-user/", async (req, res) => {
   if (fieldsProvided.length !== 1) {
     return res.status(400).json({
       success: false,
-      message: "Only one field can be provided for update",
+      message: "Only one field should be provided for update",
     });
   }
 
@@ -201,7 +203,12 @@ app.patch("/update-user/", async (req, res) => {
 app.delete("/delete-user/:id", async (req, res) => {
   const id = req.params.id;
   if (!mongodb.ObjectId.isValid(id)) {
-    return res.status(400).json({ success: false, message: "Invalid user ID" });
+    return res
+      .status(400)
+      .json({
+        success: false,
+        message: "Invalid user ID, could not delete the user",
+      });
   }
   users
     .deleteOne({ _id: new mongodb.ObjectId(id) })
