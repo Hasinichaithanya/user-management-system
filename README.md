@@ -17,7 +17,7 @@
 ![ScreenShot](https://github.com/Hasinichaithanya/user-management-system/blob/main/Screenshot%202024-04-10%20101550.png)
 
 #### In one of the terminals first start the server using the below command:
-### `npm index.cjs` (It will start the server)
+### `node index.cjs` (It will start the server)
 
 #### Make sure to have a good internet connection otherwise you may get a timeout error.
 
